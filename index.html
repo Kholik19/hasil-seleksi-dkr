@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hasil Seleksi DKR</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #f1f2f6, #dfe4ea);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 40px;
+      margin: 0;
+    }
+    .card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+    h2 {
+      font-size: 18px;
+      color: #2f3542;
+      margin-bottom: 20px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      border-radius: 6px;
+      font-family: 'Poppins', sans-serif;
+    }
+    input {
+      border: 1px solid #ccc;
+    }
+    button {
+      border: none;
+      background: #2ed573;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+    }
+    .modal-content.success { border-left: 6px solid #2ed573; }
+    .modal-content.failed { border-left: 6px solid #ff4757; }
+    .status {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .success .status { color: #2ed573; }
+    .failed .status { color: #ff4757; }
+    .motivasi {
+      font-style: italic;
+      color: #57606f;
+      margin-top: 10px;
+    }
+    .close-btn {
+      margin-top: 20px;
+      background-color: #57606f;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>CEK HASIL SELEKSI DKR PAMARICAN 2024</h2>
+  <input type="text" id="nama" placeholder="Masukkan Nama Anda">
+  <input type="text" id="id" placeholder="Masukkan ID Anda">
+  <button onclick="cekHasil()">Lihat Hasil</button>
+</div>
+
+<div class="modal" id="modalHasil">
+  <div class="modal-content" id="modalContent">
+    <div class="status" id="statusText"></div>
+    <div class="info" id="infoPeserta"></div>
+    <p class="motivasi" id="motivasiText"></p>
+    <button class="close-btn" onclick="tutupModal()">Tutup</button>
+  </div>
+</div>
+
+<script>
+  const dataPeserta = [
+    { id: "109871", nama: "TRI NURHAYATI", pangkalan: "MA IPHI PAMARICAN", status: "TIDAK LULUS" },
+    { id: "109872", nama: "DINDA KARTIKA SUDIRMAN", pangkalan: "MAN 4 CIAMIS", status: "TIDAK LULUS" },
+    { id: "109873", nama: "ANISA AGUSTINA RIFANI", pangkalan: "MAN 4 CIAMIS", status: "LULUS" },
+    { id: "109874", nama: "IMEY WULANDARI", pangkalan: "LAINYA", status: "TIDAK LULUS" },
+    { id: "109875", nama: "DIKA PRATAMA", pangkalan: "SMAN 1 PAMARICAN", status: "LULUS" }
+    // Tambahkan sisa data di sini...
+  ];
+
+  function cekHasil() {
+    const nama = document.getElementById("nama").value.trim().toUpperCase();
+    const id = document.getElementById("id").value.trim();
+
+    const peserta = dataPeserta.find(p =>
+      p.id === id && p.nama.toUpperCase() === nama
+    );
+
+    const modal = document.getElementById("modalHasil");
+    const modalContent = document.getElementById("modalContent");
+    const statusText = document.getElementById("statusText");
+    const motivasiText = document.getElementById("motivasiText");
+    const infoPeserta = document.getElementById("infoPeserta");
+
+    if (peserta) {
+      const isLulus = peserta.status === "LULUS";
+      modalContent.className = isLulus ? "modal-content success" : "modal-content failed";
+      statusText.textContent = isLulus ? "SELAMAT ANDA LULUS!" : "MAAF ANDA BELUM LULUS.";
+      infoPeserta.innerHTML = `
+        <strong>Nama:</strong> ${peserta.nama}<br>
+        <strong>Pangkalan:</strong> ${peserta.pangkalan}<br>
+        <strong>Status:</strong> ${peserta.status}
+      `;
+      motivasiText.textContent = isLulus
+        ? "Terus pertahankan semangat dan dedikasimu untuk Pramuka!"
+        : "Jangan berkecil hati, tetap semangat dan coba lagi tahun depan!";
+      modal.style.display = "flex";
+    } else {
+      alert("Data tidak ditemukan. Pastikan nama dan ID sesuai.");
+    }
+  }
+
+  function tutupModal() {
+    document.getElementById("modalHasil").style.display = "none";
+  }
+</script>
+</body>
+</html>
